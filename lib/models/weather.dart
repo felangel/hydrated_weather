@@ -35,17 +35,20 @@ class Weather extends Equatable {
     this.created,
     this.lastUpdated,
     this.location,
-  }) : super([
-          condition,
-          formattedCondition,
-          minTemp,
-          temp,
-          maxTemp,
-          locationId,
-          created,
-          lastUpdated,
-          location,
-        ]);
+  });
+
+  @override
+  List<Object> get props => [
+        condition,
+        formattedCondition,
+        minTemp,
+        temp,
+        maxTemp,
+        locationId,
+        created,
+        lastUpdated,
+        location,
+      ];
 
   static Weather fromJson(dynamic json) {
     final consolidatedWeather = json['consolidated_weather'][0];

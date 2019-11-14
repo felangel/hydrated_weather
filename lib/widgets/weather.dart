@@ -23,7 +23,6 @@ class _WeatherState extends State<Weather> {
 
   @override
   Widget build(BuildContext context) {
-    final weatherBloc = BlocProvider.of<WeatherBloc>(context);
     return Scaffold(
       appBar: AppBar(
         title: Text('Flutter Weather'),
@@ -49,32 +48,28 @@ class _WeatherState extends State<Weather> {
                 ),
               );
               if (city != null) {
-                weatherBloc.dispatch(FetchWeather(city: city));
+                BlocProvider.of<WeatherBloc>(context)
+                    .add(FetchWeather(city: city));
               }
             },
           )
         ],
       ),
       body: Center(
-        child: BlocListener(
-          bloc: weatherBloc,
+        child: BlocListener<WeatherBloc, WeatherState>(
           listener: (BuildContext context, WeatherState state) {
             if (state is WeatherLoaded) {
-              BlocProvider.of<ThemeBloc>(context).dispatch(
+              BlocProvider.of<ThemeBloc>(context).add(
                 WeatherChanged(condition: state.weather.condition),
               );
               _refreshCompleter?.complete();
               _refreshCompleter = Completer();
             }
           },
-          child: BlocBuilder(
-            bloc: weatherBloc,
+          child: BlocBuilder<WeatherBloc, WeatherState>(
             builder: (_, WeatherState state) {
               if (state is WeatherEmpty) {
                 return Center(child: Text('Please Select a Location'));
-              }
-              if (state is WeatherLoading) {
-                return Center(child: CircularProgressIndicator());
               }
               if (state is WeatherLoaded) {
                 final weather = state.weather;
@@ -86,7 +81,7 @@ class _WeatherState extends State<Weather> {
                       color: themeState.color,
                       child: RefreshIndicator(
                         onRefresh: () {
-                          weatherBloc.dispatch(
+                          BlocProvider.of<WeatherBloc>(context).add(
                             RefreshWeather(city: weather.location),
                           );
                           return _refreshCompleter.future;
@@ -123,6 +118,7 @@ class _WeatherState extends State<Weather> {
                   style: TextStyle(color: Colors.red),
                 );
               }
+              return Center(child: CircularProgressIndicator());
             },
           ),
         ),

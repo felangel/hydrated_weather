@@ -4,7 +4,12 @@ import 'package:meta/meta.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:equatable/equatable.dart';
 
-abstract class SettingsEvent extends Equatable {}
+abstract class SettingsEvent extends Equatable {
+  const SettingsEvent();
+
+  @override
+  List<Object> get props => [];
+}
 
 class TemperatureUnitsToggled extends SettingsEvent {
   @override
@@ -16,9 +21,11 @@ enum TemperatureUnits { fahrenheit, celsius }
 class SettingsState extends Equatable {
   final TemperatureUnits temperatureUnits;
 
-  SettingsState({@required this.temperatureUnits})
-      : assert(temperatureUnits != null),
-        super([temperatureUnits]);
+  const SettingsState({@required this.temperatureUnits})
+      : assert(temperatureUnits != null);
+
+  @override
+  List<Object> get props => [temperatureUnits];
 
   @override
   String toString() => 'SettingsState { temperatureUnits: $temperatureUnits }';
@@ -34,10 +41,9 @@ class SettingsBloc extends HydratedBloc<SettingsEvent, SettingsState> {
   Stream<SettingsState> mapEventToState(SettingsEvent event) async* {
     if (event is TemperatureUnitsToggled) {
       yield SettingsState(
-        temperatureUnits:
-            currentState.temperatureUnits == TemperatureUnits.celsius
-                ? TemperatureUnits.fahrenheit
-                : TemperatureUnits.celsius,
+        temperatureUnits: state.temperatureUnits == TemperatureUnits.celsius
+            ? TemperatureUnits.fahrenheit
+            : TemperatureUnits.celsius,
       );
     }
   }

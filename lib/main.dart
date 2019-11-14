@@ -41,8 +41,8 @@ void main() async {
     ),
   );
   runApp(
-    BlocProviderTree(
-      blocProviders: [
+    MultiBlocProvider(
+      providers: [
         BlocProvider<ThemeBloc>(
           builder: (context) => ThemeBloc(),
         ),
@@ -53,9 +53,9 @@ void main() async {
       child: BlocProvider(
         builder: (context) {
           final bloc = WeatherBloc(weatherRepository: weatherRepository);
-          final state = bloc.currentState;
+          final state = bloc.state;
           if (state is WeatherLoaded) {
-            bloc.dispatch(RefreshWeather(city: state.weather.location));
+            bloc.add(RefreshWeather(city: state.weather.location));
           }
           return bloc;
         },

@@ -8,15 +8,19 @@ import 'package:flutter_weather/repositories/repositories.dart';
 import 'package:flutter_weather/models/models.dart';
 
 abstract class WeatherEvent extends Equatable {
-  WeatherEvent([List props = const []]) : super(props);
+  const WeatherEvent();
+
+  @override
+  List<Object> get props => [];
 }
 
 class FetchWeather extends WeatherEvent {
   final String city;
 
-  FetchWeather({@required this.city})
-      : assert(city != null),
-        super([city]);
+  const FetchWeather({@required this.city}) : assert(city != null);
+
+  @override
+  List<Object> get props => [city];
 
   @override
   String toString() => 'FetchWeather { city: $city }';
@@ -25,16 +29,20 @@ class FetchWeather extends WeatherEvent {
 class RefreshWeather extends WeatherEvent {
   final String city;
 
-  RefreshWeather({@required this.city})
-      : assert(city != null),
-        super([city]);
+  const RefreshWeather({@required this.city}) : assert(city != null);
+
+  @override
+  List<Object> get props => [city];
 
   @override
   String toString() => 'RefreshWeather { city: $city }';
 }
 
 abstract class WeatherState extends Equatable {
-  WeatherState([List props = const []]) : super(props);
+  const WeatherState();
+
+  @override
+  List<Object> get props => [];
 }
 
 class WeatherEmpty extends WeatherState {
@@ -50,9 +58,10 @@ class WeatherLoading extends WeatherState {
 class WeatherLoaded extends WeatherState {
   final Weather weather;
 
-  WeatherLoaded({@required this.weather})
-      : assert(weather != null),
-        super([weather]);
+  const WeatherLoaded({@required this.weather}) : assert(weather != null);
+
+  @override
+  List<Object> get props => [weather];
 
   @override
   String toString() => 'WeatherLoaded { weather: $weather }';
@@ -88,9 +97,7 @@ class WeatherBloc extends HydratedBloc<WeatherEvent, WeatherState> {
       try {
         final Weather weather = await weatherRepository.getWeather(event.city);
         yield WeatherLoaded(weather: weather);
-      } catch (_) {
-        yield currentState;
-      }
+      } catch (_) {}
     }
   }
 

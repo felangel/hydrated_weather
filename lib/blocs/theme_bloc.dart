@@ -12,10 +12,12 @@ class ThemeState extends Equatable {
   final ThemeData theme;
   final MaterialColor color;
 
-  ThemeState({@required this.theme, @required this.color})
+  const ThemeState({@required this.theme, @required this.color})
       : assert(theme != null),
-        assert(color != null),
-        super([theme, color]);
+        assert(color != null);
+
+  @override
+  List<Object> get props => [theme, color];
 
   @override
   String toString() =>
@@ -23,15 +25,16 @@ class ThemeState extends Equatable {
 }
 
 abstract class ThemeEvent extends Equatable {
-  ThemeEvent([List props = const []]) : super(props);
+  const ThemeEvent();
 }
 
 class WeatherChanged extends ThemeEvent {
   final WeatherCondition condition;
 
-  WeatherChanged({@required this.condition})
-      : assert(condition != null),
-        super([condition]);
+  const WeatherChanged({@required this.condition}) : assert(condition != null);
+
+  @override
+  List<Object> get props => [condition];
 
   @override
   String toString() => 'WeatherChanged { condition: $condition }';
