@@ -21,9 +21,6 @@ class FetchWeather extends WeatherEvent {
 
   @override
   List<Object> get props => [city];
-
-  @override
-  String toString() => 'FetchWeather { city: $city }';
 }
 
 class RefreshWeather extends WeatherEvent {
@@ -33,9 +30,6 @@ class RefreshWeather extends WeatherEvent {
 
   @override
   List<Object> get props => [city];
-
-  @override
-  String toString() => 'RefreshWeather { city: $city }';
 }
 
 abstract class WeatherState extends Equatable {
@@ -45,15 +39,9 @@ abstract class WeatherState extends Equatable {
   List<Object> get props => [];
 }
 
-class WeatherEmpty extends WeatherState {
-  @override
-  String toString() => 'WeatherEmpty';
-}
+class WeatherEmpty extends WeatherState {}
 
-class WeatherLoading extends WeatherState {
-  @override
-  String toString() => 'WeatherEmpty';
-}
+class WeatherLoading extends WeatherState {}
 
 class WeatherLoaded extends WeatherState {
   final Weather weather;
@@ -62,15 +50,9 @@ class WeatherLoaded extends WeatherState {
 
   @override
   List<Object> get props => [weather];
-
-  @override
-  String toString() => 'WeatherLoaded { weather: $weather }';
 }
 
-class WeatherError extends WeatherState {
-  @override
-  String toString() => 'WeatherError';
-}
+class WeatherError extends WeatherState {}
 
 class WeatherBloc extends HydratedBloc<WeatherEvent, WeatherState> {
   final WeatherRepository weatherRepository;

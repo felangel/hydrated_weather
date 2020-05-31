@@ -18,10 +18,6 @@ class ThemeState extends Equatable {
 
   @override
   List<Object> get props => [theme, color];
-
-  @override
-  String toString() =>
-      'ThemeState { theme: ${theme.primaryColor}, color: $color }';
 }
 
 abstract class ThemeEvent extends Equatable {
@@ -35,9 +31,6 @@ class WeatherChanged extends ThemeEvent {
 
   @override
   List<Object> get props => [condition];
-
-  @override
-  String toString() => 'WeatherChanged { condition: $condition }';
 }
 
 class ThemeBloc extends HydratedBloc<ThemeEvent, ThemeState> {

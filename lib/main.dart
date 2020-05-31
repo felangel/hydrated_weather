@@ -1,3 +1,4 @@
+import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 
 import 'package:http/http.dart' as http;
@@ -14,24 +15,26 @@ class SimpleBlocDelegate extends HydratedBlocDelegate {
 
   @override
   void onEvent(Bloc bloc, Object event) {
-    super.onEvent(bloc, event);
     print(event);
+    super.onEvent(bloc, event);
   }
 
   @override
   onTransition(Bloc bloc, Transition transition) {
-    super.onTransition(bloc, transition);
     print(transition);
+    super.onTransition(bloc, transition);
   }
 
   @override
   void onError(Bloc bloc, Object error, StackTrace stacktrace) {
-    super.onError(bloc, error, stacktrace);
     print(error);
+    super.onError(bloc, error, stacktrace);
   }
 }
 
 void main() async {
+  EquatableConfig.stringify = true;
+  WidgetsFlutterBinding.ensureInitialized();
   BlocSupervisor.delegate = SimpleBlocDelegate(
     await HydratedBlocStorage.getInstance(),
   );
@@ -43,15 +46,11 @@ void main() async {
   runApp(
     MultiBlocProvider(
       providers: [
-        BlocProvider<ThemeBloc>(
-          builder: (context) => ThemeBloc(),
-        ),
-        BlocProvider<SettingsBloc>(
-          builder: (context) => SettingsBloc(),
-        ),
+        BlocProvider(create: (_) => ThemeBloc()),
+        BlocProvider(create: (_) => SettingsBloc()),
       ],
       child: BlocProvider(
-        builder: (context) {
+        create: (context) {
           final bloc = WeatherBloc(weatherRepository: weatherRepository);
           final state = bloc.state;
           if (state is WeatherLoaded) {
@@ -68,9 +67,8 @@ void main() async {
 class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder(
-      bloc: BlocProvider.of<ThemeBloc>(context),
-      builder: (_, ThemeState themeState) {
+    return BlocBuilder<ThemeBloc, ThemeState>(
+      builder: (context, themeState) {
         return MaterialApp(
           title: 'Flutter Weather',
           theme: themeState.theme,

@@ -11,10 +11,7 @@ abstract class SettingsEvent extends Equatable {
   List<Object> get props => [];
 }
 
-class TemperatureUnitsToggled extends SettingsEvent {
-  @override
-  String toString() => 'TemperatureUnitsToggled';
-}
+class TemperatureUnitsToggled extends SettingsEvent {}
 
 enum TemperatureUnits { fahrenheit, celsius }
 
@@ -26,9 +23,6 @@ class SettingsState extends Equatable {
 
   @override
   List<Object> get props => [temperatureUnits];
-
-  @override
-  String toString() => 'SettingsState { temperatureUnits: $temperatureUnits }';
 }
 
 class SettingsBloc extends HydratedBloc<SettingsEvent, SettingsState> {

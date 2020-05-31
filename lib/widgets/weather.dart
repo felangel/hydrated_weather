@@ -48,8 +48,7 @@ class _WeatherState extends State<Weather> {
                 ),
               );
               if (city != null) {
-                BlocProvider.of<WeatherBloc>(context)
-                    .add(FetchWeather(city: city));
+                context.bloc<WeatherBloc>().add(FetchWeather(city: city));
               }
             },
           )
@@ -57,33 +56,32 @@ class _WeatherState extends State<Weather> {
       ),
       body: Center(
         child: BlocListener<WeatherBloc, WeatherState>(
-          listener: (BuildContext context, WeatherState state) {
+          listener: (context, state) {
             if (state is WeatherLoaded) {
-              BlocProvider.of<ThemeBloc>(context).add(
-                WeatherChanged(condition: state.weather.condition),
-              );
+              context
+                  .bloc<ThemeBloc>()
+                  .add(WeatherChanged(condition: state.weather.condition));
               _refreshCompleter?.complete();
               _refreshCompleter = Completer();
             }
           },
           child: BlocBuilder<WeatherBloc, WeatherState>(
-            builder: (_, WeatherState state) {
+            builder: (context, state) {
               if (state is WeatherEmpty) {
                 return Center(child: Text('Please Select a Location'));
               }
               if (state is WeatherLoaded) {
                 final weather = state.weather;
 
-                return BlocBuilder(
-                  bloc: BlocProvider.of<ThemeBloc>(context),
-                  builder: (_, ThemeState themeState) {
+                return BlocBuilder<ThemeBloc, ThemeState>(
+                  builder: (context, themeState) {
                     return GradientContainer(
                       color: themeState.color,
                       child: RefreshIndicator(
                         onRefresh: () {
-                          BlocProvider.of<WeatherBloc>(context).add(
-                            RefreshWeather(city: weather.location),
-                          );
+                          context
+                              .bloc<WeatherBloc>()
+                              .add(RefreshWeather(city: weather.location));
                           return _refreshCompleter.future;
                         },
                         child: ListView(
