@@ -1,3 +1,4 @@
+**⚠️ Attention: This repository has been moved to https://github.com/felangel/bloc/tree/master/examples/flutter_weather and is now read-only!**
 # flutter_weather
 
 A new Flutter project.
